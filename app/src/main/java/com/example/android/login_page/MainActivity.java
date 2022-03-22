@@ -43,8 +43,16 @@ public class MainActivity extends AppCompatActivity {
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
                 String email = mUsername.getText().toString();
                 String password = mPassword.getText().toString();
-                if(UserDao.getUserDetails(db,email,password)!=null){
+                if(UserDao.getUserDetails(db,email,password).getCount()!=0){
                    Cursor cursor = UserDao.getUserDetails(db,email,password);
+                   cursor.moveToNext();
+                    Intent intent = new Intent(MainActivity.this,DashBoard.class);
+                    intent.putExtra("username",cursor.getString(cursor.getColumnIndexOrThrow(UserDao.COLUMN_NAME_USERNAME)));
+                    intent.putExtra("email",cursor.getString(cursor.getColumnIndexOrThrow(UserDao.COLUMN_NAME_EMAIL)));
+                    intent.putExtra("phone",cursor.getString(cursor.getColumnIndexOrThrow(UserDao.COLUMN_NAME_PHONE)));
+                    intent.putExtra("location",cursor.getString(cursor.getColumnIndexOrThrow(UserDao.COLUMN_NAME_LOCATION)));
+                    startActivity(intent);
+
                 };
             }
         });
